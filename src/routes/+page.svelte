@@ -6,8 +6,8 @@ import {HttpTransportType, HubConnectionBuilder} from "@microsoft/signalr"
 	import { onMount } from "svelte";
 	import type { item } from '../types';
 let hi;
-let data;
-let datatimeseries=[];
+let data:item;
+let datatimeseries:item[]=[];
 onMount(() => {
   async function foo() {
     hi = await a();
@@ -73,7 +73,7 @@ await connection.start().catch(function (err) {
 <LineChart
   data={
     datatimeseries.map(item => {
-      return { "group": "millis", "value": item.hi, "date": new Date(item.date["$date"]).toISOString()}
+      return { "group": "millis", "value": item.hi, "date": new Date(item.date.$date).toISOString()}
   })
   }
   options={{

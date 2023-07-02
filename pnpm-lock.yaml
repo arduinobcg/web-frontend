@@ -25,6 +25,9 @@ dependencies:
   d3:
     specifier: ^7.8.5
     version: 7.8.5
+  date-fns:
+    specifier: ^2.30.0
+    version: 2.30.0
   get-pixels:
     specifier: ^3.3.3
     version: 3.3.3
@@ -86,6 +89,13 @@ devDependencies:
     version: 4.3.9(sass@1.63.4)
 
 packages:
+
+  /@babel/runtime@7.22.5:
+    resolution: {integrity: sha512-ecjvYlnAaZ/KVneE/OdKYBYfgXV3Ptu6zQWmgEF7vwKhQnvVS6bjMD2XYgj+SNvQ1GfK/pjgokfPkC/2CO8CuA==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.13.11
+    dev: false
 
   /@carbon/charts-svelte@1.8.0(d3@7.8.5)(sass@1.63.4)(svelte@3.59.1):
     resolution: {integrity: sha512-5aFtpgmmHp9i8p97sL095NSEMuElAT9J/2Ent0vBrqIpAwZtVRjKCjNVUh2VmCNi6E+uVp+qsqlPTWerUSdykA==}
@@ -1329,6 +1339,13 @@ packages:
       whatwg-url: 12.0.1
     dev: true
 
+  /date-fns@2.30.0:
+    resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
+    engines: {node: '>=0.11'}
+    dependencies:
+      '@babel/runtime': 7.22.5
+    dev: false
+
   /date-fns@2.8.1:
     resolution: {integrity: sha512-EL/C8IHvYRwAHYgFRse4MGAPSqlJVlOrhVYZ75iQBKrnv+ZedmYsgwH3t+BCDuZDXpoo07+q9j4qgSSOa7irJg==}
     dev: false
@@ -2539,6 +2556,10 @@ packages:
     engines: {node: '>=8.10.0'}
     dependencies:
       picomatch: 2.3.1
+
+  /regenerator-runtime@0.13.11:
+    resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
+    dev: false
 
   /request@2.88.2:
     resolution: {integrity: sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==}

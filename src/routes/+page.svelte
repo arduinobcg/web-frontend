@@ -1,7 +1,10 @@
 <script lang="ts">
 import '@carbon/styles/css/styles.css';
+import "carbon-components-svelte/css/g100.css";
 import '@carbon/charts/styles.css';
 import { LineChart } from "@carbon/charts-svelte";
+import {Button} from "carbon-components-svelte";
+import thLocaleObject from "date-fns/locale/th/index";
 import {HttpTransportType, HubConnectionBuilder} from "@microsoft/signalr"
 	import { onMount } from "svelte";
 	import type { item } from '../types';
@@ -43,6 +46,7 @@ await connection.start().catch(function (err) {
         next: (item) => {
             console.log("next",item);
             data=JSON.parse(item)
+            console.log(data);
             datatimeseries=[...datatimeseries,data]
         },
         complete: () => {
@@ -61,19 +65,16 @@ await connection.start().catch(function (err) {
 
 </script>
 <!-- {connection.invoke()} -->
-<h1>millis()</h1>
-{data && data.hi}
+<h1>LineGraph</h1>
+{data && JSON.stringify(data,null)}
 <br>
-<button on:click={ () => connection.invoke("test")}>send invoke</button>
-
-
-{data && data.date.toString()}
-
+<Button on:click={ () => datatimeseries=[]}>Clear history</Button>
 
 <LineChart
+theme="g100"
   data={
     datatimeseries.map(item => {
-      return { "group": "millis", "value": item.hi, "date": new Date(item.date.$date).toISOString()}
+      return { "group": "millis", "value": item.hi, "date": item.date.$date}
   })
   }
   options={{
@@ -83,6 +84,9 @@ await connection.start().catch(function (err) {
       left: { mapsTo: "value" },
       bottom: { mapsTo: "date", scaleType: "time" },
     },
+    timeScale:{
+      localeObject:thLocaleObject
+    }
   }}
 />
 <style lang="scss">

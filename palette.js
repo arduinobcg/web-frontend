@@ -1,4 +1,8 @@
-import { Hct, sourceColorFromImage, themeFromSourceColor } from "@material/material-color-utilities";
+import {
+	Hct,
+	sourceColorFromImage,
+	themeFromSourceColor
+} from '@material/material-color-utilities';
 // #adc6ff
 const color = Hct.fromInt(0xffadc6ff);
 console.log(`Hue: ${color.hue}`);

@@ -1,4 +1,4 @@
 export interface item {
-    hi: number
-    date: Date
+	hi: number;
+	date: Date;
 }

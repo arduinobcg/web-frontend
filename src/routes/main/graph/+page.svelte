@@ -4,7 +4,7 @@
 	import thLocaleObject from 'date-fns/locale/th/index';
 	import { HttpTransportType, HubConnectionBuilder } from '@microsoft/signalr';
 	import { onMount } from 'svelte';
-	import type { item } from '../../types';
+	import type { item } from '../../../types';
 	let hi;
 	let data: item;
 	let datatimeseries: item[] = [];

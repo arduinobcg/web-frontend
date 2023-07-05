@@ -6,7 +6,7 @@
 	import { goto } from '$app/navigation';
 	userResult.subscribe((user) => {
 		if (user) {
-			goto('/graph');
+			goto('/main');
 		}
 	});
 </script>

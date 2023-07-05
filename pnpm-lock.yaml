@@ -7,6 +7,9 @@ dependencies:
   '@carbon/charts-svelte':
     specifier: ^1.8.0
     version: 1.8.0(d3@7.8.5)(sass@1.63.4)(svelte@3.59.1)
+  '@carbon/pictograms':
+    specifier: ^12.18.0
+    version: 12.18.0
   '@carbon/styles':
     specifier: ^1.31.2
     version: 1.31.2(sass@1.63.4)
@@ -162,6 +165,10 @@ packages:
 
   /@carbon/motion@11.12.0:
     resolution: {integrity: sha512-YWDEiDJQyS/uX52f8roIdyk17OcIWtz0ImFquBq1yc/tPQoCvFgNQzb0ruzHtkB5lEq8fT2yZQ2oZy+kXIf9dg==}
+    dev: false
+
+  /@carbon/pictograms@12.18.0:
+    resolution: {integrity: sha512-mykHeCgd0vjpUxFkVzvD5MeZyrYUQLr6+8MfviHG6d1AavkhidfJJUz761nmD9ecM3tX4J52yxQe8gKGcpl8gA==}
     dev: false
 
   /@carbon/styles@1.31.2(sass@1.63.4):

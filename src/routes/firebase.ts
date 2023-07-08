@@ -11,6 +11,7 @@ const provider = new GoogleAuthProvider();
 
 onAuthStateChanged(auth, (user) => {
 	userResult.set(user);
+	user?.getIdToken().then((e) => console.log('token:', e));
 });
 
 export function login() {

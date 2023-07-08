@@ -1,5 +1,4 @@
 <script lang="ts">
-
 	import { firebaseApp, userResult } from '../store';
 	import { Button, OverflowMenu } from 'carbon-components-svelte';
 	import { login } from '../firebase';

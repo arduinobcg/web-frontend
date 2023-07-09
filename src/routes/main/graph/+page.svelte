@@ -21,11 +21,6 @@
 	let connection = new HubConnectionBuilder()
 		.withUrl('http://localhost:5043/test', HttpTransportType.ServerSentEvents)
 		.build();
-	connection.on('hi', (res) => {
-		console.log(res);
-		//data = [...data,res];
-		// data=res.hi;
-	});
 
 	// console.log(connection);
 

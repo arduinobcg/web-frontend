@@ -28,7 +28,7 @@
 	});
 
 	async function onsubmit() {
-		if (name && plan && !forminvalid) {
+		if (!forminvalid) {
 			let json = { name, icon: plan };
 			console.log(JSON.stringify(json));
 			fetch('http://localhost:5043/AddDevice', {

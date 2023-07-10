@@ -19,3 +19,4 @@ const firebaseConfig = {
 // Initialize Firebase
 export const firebaseApp = writable(initializeApp(firebaseConfig));
 export const userResult: Writable<User | null> = writable(null);
+export const userToken:Writable<string|null> = writable(null);

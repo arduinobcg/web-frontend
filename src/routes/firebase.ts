@@ -1,25 +1,33 @@
-import { firebaseApp, userResult } from './store';
+import { firebaseApp, userResult, userToken } from './store';
 import {
 	GoogleAuthProvider,
 	getAuth,
 	signInWithPopup,
 	signInAnonymously,
-	onAuthStateChanged
+	onAuthStateChanged,
+	onIdTokenChanged
 } from 'firebase/auth';
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
 
 onAuthStateChanged(auth, (user) => {
 	userResult.set(user);
-	user?.getIdToken().then((e) => console.log('token:', e));
+	user?.getIdToken().then((e) => { console.log('token:', e); return e }).then(userToken.set);
+	
 });
+// onIdTokenChanged(auth, async (currentUser) => {
+// 	if (currentUser) {
+// 		userToken.set(await currentUser?.getIdToken());
+// 	}
+// 	userResult.set(currentUser);
+// })
 
 export function login() {
 	signInWithPopup(auth, provider)
-		.then((result) => {
+		.then(async (result) => {
 			// This gives you a Google Access Token. You can use it to access the Google API.
 			const credential = GoogleAuthProvider.credentialFromResult(result);
-			const token = credential.accessToken;
+			const token = credential?.accessToken;
 			// The signed-in user info.
 			const user = result.user;
 			// IdP data available using getAdditionalUserInfo(result)
@@ -27,6 +35,7 @@ export function login() {
 			console.log(credential);
 			console.log(user);
 			userResult.set(user);
+			userToken.set(await user.getIdToken());
 		})
 		.catch((error) => {
 			// Handle Errors here.

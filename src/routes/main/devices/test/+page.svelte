@@ -2,7 +2,7 @@
 	import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 	import type { User } from 'firebase/auth';
 	import { onMount } from 'svelte';
-	import { userResult } from '../../../store';
+	import { userResult ,userToken} from '../../../store';
 	import { Button, OverflowMenu } from 'carbon-components-svelte';
     
 let user:User|null;
@@ -62,6 +62,7 @@ let connection:HubConnection;
 
 }
 </script>
+{$userToken}
 {hubauth()}
 {#if user}
 {#await hubauth()}

@@ -7,6 +7,8 @@
 	export let selected: boolean = false;
 	export let id: number = 0;
 	export let icon: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+	export let value:string;
+	export let queueName:string;
 	import { createEventDispatcher } from 'svelte';
 	import { quintOut } from 'svelte/easing';
 	import { crossfade } from 'svelte/transition';
@@ -19,6 +21,18 @@
 			id
 		});
 	}
+	let text:string;
+	$: text = value[queueName]?.message;
+	let linetorender = [];
+
+	$:linetorender = text ? Object.keys(text).map(function(key) {
+ return [key,text[key]]
+}) : [];
+// 	if (text) {
+// 	Object.keys(text).forEach(function(key) {
+//   linetorender = [...linetorender,(key,text[key])]
+// })
+// 	}
 </script>
 
 <div class={`hi${selected ? ' selected' : ''}`}>
@@ -27,7 +41,8 @@
 			<Iconrenderer {icon} />
 			<div style="width:max-content">
 				<h5>{name}</h5>
-				<p>5 L/hour</p>
+				<!-- <p>{linetorender[0][0]}</p> -->
+				<p>{linetorender[0] ? `${linetorender[0][0]}:${linetorender[0][1]}` : ''}</p>
 			</div>
 		</div>
 	{/if}
@@ -38,8 +53,14 @@
 			</div>
 			<div class="text">
 				<h2>{name}</h2>
+				<code>{queueName}</code>
 				<p>
-					hihihihihihihihihihihihhihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihi
+					<!-- {JSON.stringify(text)} -->
+					<!-- {JSON.stringify(linetorender)} -->
+					{#each linetorender as k}
+					{k[0]}:{k[1]}
+					<br>
+					{/each}
 				</p>
 			</div>
 		</div>

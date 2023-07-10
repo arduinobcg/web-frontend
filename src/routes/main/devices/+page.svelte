@@ -14,6 +14,7 @@
 	import type { User } from 'firebase/auth';
 	import { onMount } from 'svelte';
 	import Iconrenderer from '../../../components/iconrenderer.svelte';
+	import {get, writable} from 'svelte/store'
 
 	let plan: 0 | 1 | 2 | 3 | 4 | 5 | 6 = 2;
 	let open = false;
@@ -55,7 +56,7 @@
 	});
 
     async function del(guid:string,token:string) {
-        await fetch(`http://localhost:5043/DeleteDevice/${guid}`, {
+        await fetch(`http://localhost:5043/DeleteDevice?guid=${guid}`, {
 			headers: { Authorization: `Bearer ${token}` },
             method:'DELETE'
 		}).then(() => rerender = !rerender);

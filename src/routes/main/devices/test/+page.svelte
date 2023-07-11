@@ -27,7 +27,7 @@ let connection:HubConnection;
 				token="";
 			}
 			connection = new HubConnectionBuilder()
-		.withUrl('http://localhost:5043/test',{ transport:HttpTransportType.ServerSentEvents,accessTokenFactory: () => token||"" }) //headers:{"Authorization": `Bearer ${tokenn}`}
+		.withUrl(`${import.meta.env.VITE_API_URL}/test`,{ transport:HttpTransportType.ServerSentEvents,accessTokenFactory: () => token||"" }) //headers:{"Authorization": `Bearer ${tokenn}`}
 		.build();
 		// connection.connection._accessToken=tokenn;
 

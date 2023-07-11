@@ -19,7 +19,7 @@
 	});
 
 	let connection = new HubConnectionBuilder()
-		.withUrl('http://localhost:5043/test', HttpTransportType.ServerSentEvents)
+		.withUrl(`${import.meta.env.VITE_API_URL}/test`, HttpTransportType.ServerSentEvents)
 		.build();
 
 	// console.log(connection);

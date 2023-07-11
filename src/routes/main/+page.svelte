@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, OverflowMenu } from 'carbon-components-svelte';
+	import { Button, OverflowMenu, ToastNotification } from 'carbon-components-svelte';
 	import { goto } from '$app/navigation';
 	import { Datastore, RainDrop } from 'carbon-icons-svelte';
 	import Dev from '../../components/dev.svelte';
@@ -9,12 +9,13 @@
 	import type { User } from 'firebase/auth';
 	import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 	import { Close } from 'carbon-icons-svelte';
+	import { SkeletonPlaceholder } from "carbon-components-svelte";
 	let selected: number;
 	let user: User | null;
-
+	let token:string;
 	let data: string | undefined;
 	let res = async (token: string) =>
-		fetch('http://localhost:5043/GetDevice', {
+		fetch(`${import.meta.env.VITE_API_URL}/GetDevice`, {
 			headers: { Authorization: `Bearer ${token}` }
 		}).then((e) => e.json()); //.then(JSON.parse);
 
@@ -27,13 +28,13 @@
 
 	async function hubauth() {
 		//console.error(token);
-		let token = await user?.getIdToken();
+		token = await user?.getIdToken();
 		if (token == undefined) {
 			console.log('token undef');
 			token = '';
 		}
 		connection = new HubConnectionBuilder()
-			.withUrl('http://localhost:5043/test', {
+			.withUrl(`${import.meta.env.VITE_API_URL}/test`, {
 				transport: HttpTransportType.ServerSentEvents,
 				accessTokenFactory: () => token || ''
 			}) //headers:{"Authorization": `Bearer ${tokenn}`}
@@ -90,17 +91,29 @@
 		return datastore[queueName].message[datastore[queueName].message.length - 1];
 	}
 </script>
-
-<h1>Dashboard</h1>
-
-<Button
+<div style="display:grid;padding-bottom:2em;grid-auto-flow:column">
+	<h1>Dashboard</h1>
+	<Button style="justify-self:flex-end;"
 	on:click={() => {
 		goto('/main/devices');
 	}}>Manage devices</Button
 >
+</div>
+
+
+
 <!-- {#await devices then dd} -->
-{#await user?.getIdToken().then((d) => res(d)) then data}
-	{#await hubauth()}{/await}
+{#await user?.getIdToken()}
+<SkeletonPlaceholder />
+{:then d}
+{#if d}
+{#await res(d)}
+<SkeletonPlaceholder />
+
+{:then data}
+	{#await hubauth()}
+	
+	{/await}
 	<!-- {JSON.stringify(datastore)} -->
 	<!-- {console.log(JSON.stringify(datastore))} -->
 	<div class="devicegrid">
@@ -131,12 +144,13 @@ style={i == selected
 							name={`${dev.name}`}
 							queueName={dev.queueName}
 							value={datastore}
+							token={token}
 						/>
 					</div>
 					{#if i == selected}
 						<Button
 							kind="ghost"
-							iconDescription="Delete"
+							iconDescription="Close"
 							icon={Close}
 							style="position:absolute;top:0;right:0; z-index: 1;"
 							on:click={() => (selected = -1)}
@@ -146,6 +160,21 @@ style={i == selected
 			{/each}
 		{/if}
 	</div>
+
+{:catch e}
+
+
+<ToastNotification
+fullWidth
+  title="Error"
+  subtitle={e.toString()}
+/>
+
+
+
+
+	{/await}
+	{/if}
 {/await}
 
 <!-- {/await} -->

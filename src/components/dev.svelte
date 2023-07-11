@@ -9,6 +9,7 @@
 	export let icon: 0 | 1 | 2 | 3 | 4 | 5 | 6;
 	export let value:string;
 	export let queueName:string;
+	export let token:string;
 	import { createEventDispatcher } from 'svelte';
 	import { quintOut } from 'svelte/easing';
 	import { crossfade } from 'svelte/transition';
@@ -25,6 +26,7 @@
 	let text:string;
 	$: text = value[queueName]?.message;
 	let linetorender = [];
+	let message:string="";
 
 	$:linetorender = text ? Object.keys(text).map(function(key) {
  return [key,text[key]]
@@ -57,8 +59,9 @@
 			<div class="text">
 				
 				<h2>{name}</h2>
-				<code style="padding-bottom:10px">{queueName}</code>
+			<code style="padding-bottom:10px">MQTT Topic: {queueName}</code>
 				<div style={`background-color:#00000033;${ linetorender.length !== 0 ? "padding:1em;" : ""}position:relative`}>
+					<h4>Live data</h4>
 				<p style="position:relative">
 					<!-- {JSON.stringify(text)} -->
 					<!-- {JSON.stringify(linetorender)} -->
@@ -70,12 +73,17 @@
 					{/if}
 				</p>
 			</div>
+			{#if token}
 			<div class="mqttsend" >
-				<TextInput size="xl" hideLabel labelText="MQTT mesage" placeholder="Enter MQTT message..." />
-				<Button>Send</Button>
-				
+				<TextInput size="xl" hideLabel labelText="MQTT mesage" bind:value={message} placeholder="Enter MQTT message..." />
+				<Button on:click={async () => {
+					fetch(`${import.meta.env.VITE_API_URL}/SendMessage?QueueName=${queueName}`,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},body:`\"${message}\"`})
+				}}>Send</Button>
 			</div>
-			<Button on:click={() => window.location = `http://localhost:5173/main/history/${queueName}`}>View History</Button>
+			{/if}
+
+
+			<Button on:click={() => window.location = `/main/history/${queueName}`}>View History</Button>
 			</div>
 			
 			

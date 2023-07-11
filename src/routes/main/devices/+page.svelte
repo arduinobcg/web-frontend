@@ -32,7 +32,7 @@
 		if (!forminvalid) {
 			let json = { name, icon: plan };
 			console.log(JSON.stringify(json));
-			fetch('http://localhost:5043/AddDevice', {
+			fetch(`${import.meta.env.VITE_API_URL}/AddDevice`, {
 				headers: {
 					Authorization: `Bearer ${await user?.getIdToken()}`,
 					'Content-Type': 'application/json'
@@ -47,7 +47,7 @@
 
 	let data: string | undefined;
 	let res = async (token: string) =>
-		fetch('http://localhost:5043/GetDevice', {
+		fetch(`${import.meta.env.VITE_API_URL}/GetDevice`, {
 			headers: { Authorization: `Bearer ${token}` }
 		}).then((e) => e.json()); //.then(JSON.parse);
 
@@ -56,7 +56,7 @@
 	});
 
     async function del(guid:string,token:string) {
-        await fetch(`http://localhost:5043/DeleteDevice?guid=${guid}`, {
+        await fetch(`${import.meta.env.VITE_API_URL}/DeleteDevice?guid=${guid}`, {
 			headers: { Authorization: `Bearer ${token}` },
             method:'DELETE'
 		}).then(() => rerender = !rerender);

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, OverflowMenu, Tile } from 'carbon-components-svelte';
+	import { Button, OverflowMenu, Tile ,TextInput} from 'carbon-components-svelte';
 	import { goto } from '$app/navigation';
 	import { RainDrop } from 'carbon-icons-svelte';
 	import type { SvelteComponentTyped } from 'svelte';
@@ -14,6 +14,7 @@
 	import { crossfade } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import Iconrenderer from './iconrenderer.svelte';
+	import { Close } from 'carbon-icons-svelte';
 	//style="width:min-content;padding:3em;margin:1em;transition: all 5s ease-in-out;transition-property: width height;transform: translate(0px);"
 	const dispatch = createEventDispatcher();
 	function disable() {
@@ -47,28 +48,59 @@
 		</div>
 	{/if}
 	{#if selected}
+	<div style="position:relative;height:inherit;width:inherit">
 		<div class="devq">
+			
 			<div class="justcenter">
 				<Iconrenderer {icon} size="256" />
 			</div>
 			<div class="text">
+				
 				<h2>{name}</h2>
-				<code>{queueName}</code>
-				<p>
+				<code style="padding-bottom:10px">{queueName}</code>
+				<div style={`background-color:#00000033;${ linetorender.length !== 0 ? "padding:1em;" : ""}position:relative`}>
+				<p style="position:relative">
 					<!-- {JSON.stringify(text)} -->
 					<!-- {JSON.stringify(linetorender)} -->
 					{#each linetorender as k}
-					{k[0]}:{k[1]}
-					<br>
+					<div style="display:grid;grid-auto-flow:column;padding-bottom:2px"><strong>{k[0]}</strong>{k[1]}</div>
 					{/each}
+					{#if linetorender.length == 0}
+					No live data yet (≧﹏ ≦)
+					{/if}
 				</p>
 			</div>
-		</div>
+			<div class="mqttsend" >
+				<TextInput size="xl" hideLabel labelText="MQTT mesage" placeholder="Enter MQTT message..." />
+				<Button>Send</Button>
+				
+			</div>
+			<Button on:click={() => window.location = `http://localhost:5173/main/history/${queueName}`}>View History</Button>
+			</div>
+			
+			
+			<!-- <Button kind="ghost" iconDescription="Delete" icon={Close} style="position:absolute;top:0;right:0;" on:click={() => selected=false}/> -->
+		
+			<!-- <div style="position:relative;height:100%;width:100%">
+			
+		</div> -->
+	</div>
+
+</div>
 	{/if}
 </div>
 
 <style lang="scss">
+	.mqttsend {
+		display:flex;
+		min-width:100%;
+
+		bottom:0;
+		position: absolute;
+	}
 	.text {
+		display: block;
+		position:relative;
 		max-width: 50%;
 		text-overflow: ellipsis !important;
 	}
@@ -90,11 +122,13 @@
 		width: 50%;
 	}
 	.devq {
+		//display: flex;
 		display: flex;
 		// grid-template-columns: 1fr 1fr 1fr;
 		// grid-template-rows: 1fr ;
 		// grid-auto-flow: column;
 		width: 100%;
+		padding:2em;
 		height: 100%;
 	}
 	.dev {
@@ -116,6 +150,7 @@
 	}
 	.hi.selected {
 		// position: absolute;
+		padding: 0em;
 		width: inherit;
 		height: inherit;
 		transition: width 0.25s ease-out;

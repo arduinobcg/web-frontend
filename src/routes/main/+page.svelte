@@ -8,6 +8,7 @@
 	import { userResult } from '../store';
 	import type { User } from 'firebase/auth';
 	import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+	import { Close } from 'carbon-icons-svelte';
 	let selected: number;
 	let user: User | null;
 
@@ -22,29 +23,28 @@
 	});
 	let datastore = {};
 
-	let connection:HubConnection;
+	let connection: HubConnection;
 
 	async function hubauth() {
-			//console.error(token);
-			let token = await user?.getIdToken();
-			if (token == undefined)
-			{
-				console.log("token undef");
-				token="";
-			}
-			connection = new HubConnectionBuilder()
-		.withUrl('http://localhost:5043/test',{ transport:HttpTransportType.ServerSentEvents,accessTokenFactory: () => token||"" }) //headers:{"Authorization": `Bearer ${tokenn}`}
-		.build();
+		//console.error(token);
+		let token = await user?.getIdToken();
+		if (token == undefined) {
+			console.log('token undef');
+			token = '';
+		}
+		connection = new HubConnectionBuilder()
+			.withUrl('http://localhost:5043/test', {
+				transport: HttpTransportType.ServerSentEvents,
+				accessTokenFactory: () => token || ''
+			}) //headers:{"Authorization": `Bearer ${tokenn}`}
+			.build();
 		// connection.connection._accessToken=tokenn;
 
-			console.log(connection);
+		console.log(connection);
 
-			
-
-
-			// connection.on("hi", (data) => {
-			// 		console.log("data",data)
-			// 	})
+		// connection.on("hi", (data) => {
+		// 		console.log("data",data)
+		// 	})
 		let pro = await connection
 			.start()
 			.catch(function (err) {
@@ -55,13 +55,13 @@
 					next: (item) => {
 						console.log('next', item);
 						if (datastore[item.queueName] == undefined) {
-						datastore[item.queueName] = {};
-	//datastore[item.queueName].message = [];
+							datastore[item.queueName] = {};
+							//datastore[item.queueName].message = [];
 						}
 
 						datastore[item.queueName].queueName = item.queueName;
-						
-						datastore[item.queueName].message = item.message
+
+						datastore[item.queueName].message = item.message;
 						console.log(datastore);
 					},
 					complete: () => {
@@ -71,19 +71,13 @@
 					error: (err) => {
 						console.log('err', err);
 					}
+				});
+			});
+	}
 
-				 });
-		 	});
-
-		}
-
-		// onMount(async () => {
-		// 	await hubauth();
-		// })
-
-
-
-
+	// onMount(async () => {
+	// 	await hubauth();
+	// })
 
 	// onMount(async () => {
 	// 	data = await user?.getIdToken().then((d) => res(d));//[1, 2, 3, 4, 5];
@@ -92,8 +86,8 @@
 	// //	console.log(res);
 	// });
 
-	function valueGetter(queueName:string) {
-		return datastore[queueName].message[datastore[queueName].message.length-1]
+	function valueGetter(queueName: string) {
+		return datastore[queueName].message[datastore[queueName].message.length - 1];
 	}
 </script>
 
@@ -106,27 +100,52 @@
 >
 <!-- {#await devices then dd} -->
 {#await user?.getIdToken().then((d) => res(d)) then data}
-{#await hubauth()}
-{/await}
-{JSON.stringify(datastore)}
-<!-- {console.log(JSON.stringify(datastore))} -->
+	{#await hubauth()}{/await}
+	<!-- {JSON.stringify(datastore)} -->
+	<!-- {console.log(JSON.stringify(datastore))} -->
 	<div class="devicegrid">
 		{#if user}
-		
 			{#each data as dev, i (dev.queueName)}
 				<!-- {void console.log("ddad",data)} -->
 				<div
-					on:click={() => {
-						i === selected ? (selected = -1) : (selected = i);
-					}}
-					style={i == selected ? `width:100%;height:40em;order:-1` : null}
+					style={i == selected
+						? `width:100%;height:40em;order:-1;position:relative; z-index: 0;`
+						: 'position:relative; z-index: 0;'}
 				>
-					<Dev id={i} selected={i === selected} icon={dev.icon} name={`${dev.name}`} queueName={dev.queueName} value={datastore}/>
+					<div
+						on:click={() => {
+							//i === selected ? (selected = -1) : (selected = i);
+							selected = i;
+						}}
+
+
+style={i == selected
+	? `width:inherit;height:inherit;order:-1;position:relative; z-index: 0`
+	: 'position:relative; z-index: 0;'}
+
+					>
+						<Dev
+							id={i}
+							selected={i === selected}
+							icon={dev.icon}
+							name={`${dev.name}`}
+							queueName={dev.queueName}
+							value={datastore}
+						/>
+					</div>
+					{#if i == selected}
+						<Button
+							kind="ghost"
+							iconDescription="Delete"
+							icon={Close}
+							style="position:absolute;top:0;right:0; z-index: 1;"
+							on:click={() => (selected = -1)}
+						/>
+					{/if}
 				</div>
 			{/each}
 		{/if}
 	</div>
-	
 {/await}
 
 <!-- {/await} -->

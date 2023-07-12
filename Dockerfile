@@ -1,6 +1,7 @@
 FROM node:18 AS build
 WORKDIR /app
 COPY . .
+ENV VITE_API_URL=https://bcgapi.sencha.moe
 RUN npm i
 RUN npm run build
 
